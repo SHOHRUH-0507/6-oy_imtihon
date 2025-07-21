@@ -1,11 +1,11 @@
-import Header from "@/components/Header";
-import Home from "@/pages/Home";
+import Header from "./components/Header";
+import All from "./Pages/All";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="bg-gray-400">
       <Header />
-      <Home />
+      <All />
     </div>
   );
 }

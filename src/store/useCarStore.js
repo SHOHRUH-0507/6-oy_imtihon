@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import toast from "react-hot-toast";
+import { create } from "zustand";
 
 const urls = {
   uz: "https://json-api.uz/api/project/fn38-6-exam/uz",
@@ -10,15 +10,9 @@ const urls = {
 const useCarStore = create((set, get) => ({
   lang: "uz",
   cars: [],
-  cart: {},
-  loading: false,
+  Trolley: {},
   error: false,
-
-  setLang: (lang) => {
-    set({ lang });
-    toast.success("Til o'zgartirildi: " + lang);
-    get().fetchCars();
-  },
+  loading: false,
 
   fetchCars: () => {
     const lang = get().lang;
@@ -32,46 +26,52 @@ const useCarStore = create((set, get) => ({
       })
       .catch((err) => {
         set({ error: err.message });
-        toast.error("Xatolik: " + err.message);
+        toast.error("404: " + err.message);
       })
       .finally(() => {
         set({ loading: false });
       });
   },
 
-  addToCart: (id) => {
-    const cart = { ...get().cart };
-    cart[id] = 1;
-    set({ cart });
-    toast.success("Savatga qo'shildi");
+  setLang: (lang) => {
+    set({ lang });
+    toast.success("til o'zgartirildi: " + lang);
+    get().fetchCars();
+  },
+
+  addToTrolley: (id) => {
+    const Trolley = { ...get().Trolley };
+    Trolley[id] = 1;
+    set({ Trolley });
+    toast.success("Korzinaga qo'shildi");
   },
 
   increment: (id) => {
-    const cart = { ...get().cart };
-    cart[id]++;
-    set({ cart });
+    const Trolley = { ...get().Trolley };
+    Trolley[id]++;
+    set({ Trolley });
   },
 
   decrement: (id) => {
-    const cart = { ...get().cart };
-    cart[id]--;
-    if (cart[id] <= 0) {
-      delete cart[id];
+    const Trolley = { ...get().Trolley };
+    Trolley[id]--;
+    if (Trolley[id] <= 0) {
+      delete Trolley[id];
       toast("Olib tashlandi");
     }
-    set({ cart });
+    set({ Trolley });
   },
 
-  removeFromCart: (id) => {
-    const cart = { ...get().cart };
-    delete cart[id];
-    set({ cart });
+  removeFromTrolley: (id) => {
+    const Trolley = { ...get().Trolley };
+    delete Trolley[id];
+    set({ Trolley });
     toast("Olib tashlandi");
   },
 
-  clearCart: () => {
-    set({ cart: {} });
-    toast("Savat tozalandi");
+  clearTrolley: () => {
+    set({ Trolley: {} });
+    toast("Korzina tozalandi");
   },
 }));
 
