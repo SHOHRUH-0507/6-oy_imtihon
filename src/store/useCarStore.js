@@ -1,78 +1,90 @@
-import toast from "react-hot-toast";
 import { create } from "zustand";
+import toast from "react-hot-toast";
 
-const urls = {
-  uz: "https://json-api.uz/api/project/fn38-6-exam/uz",
-  ru: "https://json-api.uz/api/project/fn38-6-exam/ru",
-  en: "https://json-api.uz/api/project/fn38-6-exam/en",
-};
+const API_BASE = "https://json-api.uz/api/project/fn38-6-exam";
 
-const useCarStore = create((set, get) => ({
-  lang: "uz",
-  cars: [],
-  Trolley: {},
-  error: false,
-  loading: false,
+const useCarStore = create((set, get) => {
+  const initialState = {
+    lang: "uz",
+    cars: [],
+    Trolley: {},
+    loading: false,
+    error: null,
+  };
 
-  fetchCars: () => {
-    const lang = get().lang;
+  const getUrl = () => `${API_BASE}/${get().lang}`;
 
-    set({ loading: true, error: null });
+  return {
+    ...initialState,
 
-    fetch(urls[lang])
-      .then((res) => res.json())
-      .then((data) => {
-        set({ cars: data.data });
-      })
-      .catch((err) => {
-        set({ error: err.message });
-        toast.error("404: " + err.message);
-      })
-      .finally(() => {
-        set({ loading: false });
-      });
-  },
+    setLang: (lang) => {
+      set({ lang }, false, "SET_LANG");
+      toast.success(`Til o'zgartirildi: ${lang}`);
+      get().fetchCars();
+    },
 
-  setLang: (lang) => {
-    set({ lang });
-    toast.success("til o'zgartirildi: " + lang);
-    get().fetchCars();
-  },
+    fetchCars: async () => {
+      set({ loading: true, error: null }, false, "FETCH_CARS_START");
 
-  addToTrolley: (id) => {
-    const Trolley = { ...get().Trolley };
-    Trolley[id] = 1;
-    set({ Trolley });
-    toast.success("Korzinaga qo'shildi");
-  },
+      try {
+        const res = await fetch(getUrl());
+        if (!res.ok) throw new Error("Ma'lumotlar olinmadi");
 
-  increment: (id) => {
-    const Trolley = { ...get().Trolley };
-    Trolley[id]++;
-    set({ Trolley });
-  },
+        const data = await res.json();
+        set({ cars: data.data }, false, "FETCH_CARS_SUCCESS");
+      } catch (err) {
+        set({ error: err.message }, false, "FETCH_CARS_ERROR");
+        toast.error("Xatolik: " + err.message);
+      } finally {
+        set({ loading: false }, false, "FETCH_CARS_END");
+      }
+    },
 
-  decrement: (id) => {
-    const Trolley = { ...get().Trolley };
-    Trolley[id]--;
-    if (Trolley[id] <= 0) {
-      delete Trolley[id];
+    addToTrolley: (id) => {
+      set((state) => ({
+        Trolley: { ...state.Trolley, [id]: 1 },
+      }), false, "ADD_TO_TROLLEY");
+
+      toast.success("Korzinga qo'shildi");
+    },
+
+    increment: (id) => {
+      set((state) => ({
+        Trolley: {
+          ...state.Trolley,
+          [id]: (state.Trolley[id] || 0) + 1,
+        },
+      }), false, "INCREMENT_TROLLEY");
+    },
+
+    decrement: (id) => {
+      set((state) => {
+        const updated = { ...state.Trolley };
+        if (updated[id] > 1) {
+          updated[id]--;
+        } else {
+          delete updated[id];
+          toast("Olib tashlandi");
+        }
+        return { Trolley: updated };
+      }, false, "DECREMENT_TROLLEY");
+    },
+
+    removeFromTrolley: (id) => {
+      set((state) => {
+        const updated = { ...state.Trolley };
+        delete updated[id];
+        return { Trolley: updated };
+      }, false, "REMOVE_FROM_TROLLEY");
+
       toast("Olib tashlandi");
-    }
-    set({ Trolley });
-  },
+    },
 
-  removeFromTrolley: (id) => {
-    const Trolley = { ...get().Trolley };
-    delete Trolley[id];
-    set({ Trolley });
-    toast("Olib tashlandi");
-  },
-
-  clearTrolley: () => {
-    set({ Trolley: {} });
-    toast("Korzina tozalandi");
-  },
-}));
+    clearTrolley: () => {
+      set({ Trolley: {} }, false, "CLEAR_TROLLEY");
+      toast("Korzina tozalandi");
+    },
+  };
+});
 
 export default useCarStore;
