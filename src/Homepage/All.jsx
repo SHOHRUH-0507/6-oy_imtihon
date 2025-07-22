@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import useCarStore from "@/store/useCarStore";
+import useAutoStore from "@/store/useAutoStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
 import AutoCard from "@/components/AutoCard";
 
 
 export default function All() {
-  const { lang , fetchCars, loading, error, cars } = useCarStore();
+  const { lang , fetchCars, loading, error, cars } = useAutoStore();
 
   useEffect(() => {
     fetchCars();

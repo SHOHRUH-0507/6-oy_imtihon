@@ -1,9 +1,9 @@
 import TrolleyDialog from "./TrolleyDialog"
-import useCarStore from "@/store/useCarStore"
+import useAutoStore from "@/store/useAutoStore"
 import { Select } from "@/components/ui/select"
 
 export default function Header() {
-  const { lang, setLang, Trolley, cars } = useCarStore()
+  const { lang, setLang, Trolley, cars } = useAutoStore()
 
   const TrolleyItems = cars.filter((car) => Trolley[car.id])
   const totalPrice = TrolleyItems.reduce(

@@ -64,5 +64,5 @@ export function DialogTitle({ className, ...props }) {
 }
 
 export function DialogDescription({ className, ...props }) {
-  return <p className={cn("text-sm text-gray-600", className)} {...props} />
+  return <p className={cn("text-sm text-gray-700", className)} {...props} />
 }

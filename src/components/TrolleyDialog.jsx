@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Trash2, X } from "lucide-react";
-import useCarStore from "@/store/useCarStore";
+import useAutoStore from "@/store/useAutoStore";
 
 export default function TrolleyDialog() {
   const [open, setOpen] = useState(false);
   const dialogRef = useRef(null);
 
-  const { Trolley, cars, removeFromTrolley, clearTrolley } = useCarStore();
+  const { Trolley, cars, removeFromTrolley, clearTrolley } = useAutoStore();
   const TrolleyItems = cars.filter((car) => Trolley[car.id]);
   const TrolleyCount = Object.values(Trolley).reduce((acc, val) => acc + val, 0);
 

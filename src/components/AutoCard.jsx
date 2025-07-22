@@ -1,9 +1,9 @@
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import useCarStore from "@/store/useCarStore";
+import useAutoStore from "@/store/useAutoStore";
 
 export default function AutoCard({ car }) {
-  const { Trolley, addToTrolley, increment, decrement } = useCarStore();
+  const { increment, decrement, Trolley, addToTrolley,  } = useAutoStore();
   const count = Trolley[car.id] || 0;
 
   return (
@@ -23,7 +23,7 @@ export default function AutoCard({ car }) {
             buy
           </Button> 
         ) : (
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex items-center gap-2">
             <Button onClick={() => decrement(car.id)} variant="outline">−</Button>
             <span className="font-bold">{count}</span>
             <Button onClick={() => increment(car.id)} variant="outline">+</Button>

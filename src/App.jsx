@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import All from "./Pages/All";
+import All from "./Homepage/All";
 
 export default function App() {
   return (
