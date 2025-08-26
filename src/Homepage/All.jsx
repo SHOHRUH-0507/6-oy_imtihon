@@ -17,10 +17,10 @@ export default function All() {
       <div className="gap-4 p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {[...Array(9)].map((_, i) => (
           <Card key={i} className="p-4 space-y-3">
-            <Skeleton className="h-5 w-2/12" />
-            <Skeleton className="h-3 w-2/10" />
+            <Skeleton className="h-5 w-full" />
+            <Skeleton className="h-6 w-8/12" />
             <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-3 w-2/10" />
+            <Skeleton className="h-5 w-2/10" />
             <Skeleton className="h-5 w-2/8" />
           </Card>
         ))}
